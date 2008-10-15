@@ -1,0 +1,6 @@
+name = "Lame"
+version = "@VERSION@"
+description = "OCaml bindings to lame"
+requires = ""
+archive(byte) = "lame.cma"
+archive(native) = "lame.cmxa"

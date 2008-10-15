@@ -1,0 +1,29 @@
+0.2.3 ()
+=====
+* Fixed compilation error when using big endian machine
+* Fixed bswap_16 to make sure it operates on signed integers
+
+0.2.2 (2008-04-16)
+=====
+* More portable make invokation
+* Install .cmx file
+
+0.2.1 (2007-10-17)
+=====
+* Avoid a double-free at finalize.
+
+0.2.0 (2007-06-05)
+=====
+* Added encode_buffer_float{,_part}.
+
+0.1.2 (2006-03-02)
+=====
+* Fixed endianness bug
+
+0.1.1 (2006-11-11)
+=====
+* Fixed some syntax errors in configure script.
+
+0.1.0 (2006-04-09)
+=====
+* Initial release.

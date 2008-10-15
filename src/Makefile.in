@@ -1,0 +1,49 @@
+# Copyright (C) 2005-2006 Savonet team
+# liblame bindings for OCaml.
+#
+# by Samuel Mimram
+
+# $Id$
+
+OCAMLMAKEFILE = OCamlMakefile
+
+OCAMLFIND = @OCAMLFIND@
+OCAMLFIND_LDCONF = @OCAMLFIND_LDCONF@
+OCAMLC = @OCAMLC@
+OCAMLOPT = @OCAMLOPT@
+BEST = @BEST@
+OCAMLMKTOP = @OCAMLMKTOP@
+OCAMLCP = @OCAMLCP@
+OCAMLDEP = @OCAMLDEP@
+OCAMLLEX = @OCAMLLEX@
+OCAMLYACC = @OCAMLYACC@
+OCAMLDOC = @OCAMLDOC@
+LATEX = @LATEX@
+DVIPS = @DVIPS@
+PS2PDF = @PS2PDF@
+OCAMLLIBPATH = @CAMLLIBPATH@
+
+SOURCES = lame.mli lame.ml lame_stubs.c
+RESULT = lame
+OCAMLDOCFLAGS = -stars
+LIBINSTALL_FILES = $(wildcard *.mli *.cmi *.cma *.cmxa *.cmx *.a *.so)
+ACLIBS = @LIBS@
+CLIBS = $(ACLIBS:-l%=%)
+CC = @CC@
+CFLAGS = @CFLAGS@ -Wall -DCAML_NAME_SPACE
+CPPFLAGS = @CPPFLAGS@
+
+
+all: $(BEST)
+
+byte: byte-code-library
+
+opt: native-code-library
+
+install: libinstall
+
+uninstall: libuninstall
+
+update: uninstall install
+
+-include $(OCAMLMAKEFILE)

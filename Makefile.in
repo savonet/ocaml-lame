@@ -1,0 +1,26 @@
+PROGNAME = ocaml-lame
+DISTFILES = CHANGES COPYING Makefile.in README configure.ac configure bootstrap \
+	    src/META.in src/Makefile.in src/OCamlMakefile src/lame.ml src/lame.mli src/lame_stubs.c \
+	    examples/Makefile.in examples/OCamlMakefile examples/configure.ac examples/configure examples/wav2mp3.ml
+VERSION = @VERSION@
+
+all clean install uninstall:
+	$(MAKE) -C src $@
+
+distclean: clean
+	$(MAKE) -C examples clean
+
+doc:
+	$(MAKE) -C src htdoc
+	-mkdir doc
+	rm -rf doc/html
+	mv src/doc/lame/html doc
+	rm -rf src/doc
+
+dist:
+	mkdir $(PROGNAME)-$(VERSION)
+	cp -r --parents $(DISTFILES) $(PROGNAME)-$(VERSION)
+	tar zcvf ../$(PROGNAME)-$(VERSION).tar.gz $(PROGNAME)-$(VERSION)
+	rm -rf $(PROGNAME)-$(VERSION)
+
+.PHONY: doc
