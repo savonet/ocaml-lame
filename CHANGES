@@ -1,4 +1,4 @@
-0.2.3 ()
+0.2.3 (05-01-2009)
 =====
 * Fixed compilation error when using big endian machine
 * Fixed bswap_16 to make sure it operates on signed integers
