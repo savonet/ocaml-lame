@@ -27,6 +27,7 @@ SOURCES = lame.mli lame.ml lame_stubs.c
 RESULT = lame
 OCAMLDOCFLAGS = -stars
 LIBINSTALL_FILES = $(wildcard *.mli *.cmi *.cma *.cmxa *.cmx *.a *.so)
+LDFLAGS = @LDFLAGS@
 ACLIBS = @LIBS@
 CLIBS = $(ACLIBS:-l%=%)
 LIBDIRS = $(LDFLAGS:-L%=%)
