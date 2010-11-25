@@ -62,7 +62,7 @@ let input_short chan =
 let stereo = ref true
 let freq = ref 44100
 let bitrate = ref 128
-let usage = "usage: wav2ogg [options] source destination"
+let usage = "usage: wav2mp3 [options] source destination"
 
 let _ =
   Arg.parse
