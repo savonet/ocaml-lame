@@ -18,6 +18,7 @@ AC_CHECK_OCAML_COMPILERS()
 
 AC_PROG_CC
 AC_CHECK_TOOL([AR],[ar],no)
+AC_SUBST(AR)
 
 # Check for liblame
 LAME_LIBS="-lmp3lame -lm"
