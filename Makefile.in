@@ -1,5 +1,5 @@
 PROGNAME = ocaml-lame
-DISTFILES = CHANGES COPYING Makefile.in README configure.ac configure bootstrap \
+DISTFILES = CHANGES COPYING Makefile.in README configure.ac configure bootstrap m4/*.m4 \
 	    src/META.in src/Makefile.in src/OCamlMakefile src/lame.ml src/lame.mli src/lame_stubs.c \
 	    examples/Makefile.in examples/OCamlMakefile examples/configure.ac examples/configure examples/wav2mp3.ml
 VERSION = @VERSION@
