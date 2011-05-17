@@ -12,6 +12,7 @@ OCAMLFIND_LDCONF = @OCAMLFIND_LDCONF@
 OCAMLC = @OCAMLC@
 OCAMLOPT = @OCAMLOPT@
 OCAMLBEST = @OCAMLBEST@
+OCAML_DYNLINK = @OCAML_DYNLINK@
 OCAMLMKTOP = @OCAMLMKTOP@
 OCAMLMKLIB = @OCAMLMKLIB@
 OCAMLCP = @OCAMLCP@
@@ -27,7 +28,7 @@ OCAMLLIBPATH = @CAMLLIBPATH@
 SOURCES = lame.mli lame.ml lame_stubs.c
 RESULT = lame
 OCAMLDOCFLAGS = -stars
-LIBINSTALL_FILES = $(wildcard *.mli *.cmi *.cma *.cmxa *.cmx *.a *.so)
+LIBINSTALL_FILES = $(wildcard *.mli *.cmi *.cma *.cmxa *.cmx *.a *.so *.cmxs)
 LDFLAGS = @LDFLAGS@
 ACLIBS = @LIBS@
 CLIBS = $(ACLIBS:-l%=%)
@@ -40,11 +41,36 @@ NO_CUSTOM = yes
 OCAMLFLAGS = @OCAMLFLAGS@
 
 
-all: $(OCAMLBEST)
+all: $(OCAMLBEST) $(OCAML_DYNLINK) clean-dyn-cmi
 
 byte: byte-code-library
 
 opt: native-code-library
+
+byte-dyn: lame.cma lame_loader.cma
+
+lame_loader.cma: lame_dynlink.mli lame.cma lame_loader.ml
+	$(OCAMLC) -a $(OCAMLFLAGS) lame_dynlink.mli lame_loader.ml -o lame_loader.cma
+
+opt-dyn : lame.cmxs lame_loader.cmxs
+
+lame_dynlink.mli: lame_dynlink.mli.in lame.cmi
+	$(OCAMLC) -i -intf lame_dynlink.mli.in > lame_dynlink.mli 2>/dev/null
+
+lame.cmxs: lame.ml lame_stubs.o
+	[ ! -f lame.cmx ] || mv lame.cmx lame.cmx.old
+	$(OCAMLOPT) $(OCAMLFLAGS) $(CLIBS_OPTS) -shared lame.ml lame_stubs.o -o lame.cmxs
+	[ ! -f lame.cmx.old ] || mv lame.cmx.old lame.cmx
+
+lame_loader.cmxs: lame_dynlink.mli lame.cmxs lame_loader.ml
+	[ ! -f lame.cmx ] || mv lame.cmx lame.cmx.old
+	[ ! -f lame.cmxa ] || mv lame.cmxa lame.cmxa.old
+	$(OCAMLOPT) $(OCAMLFLAGS) -shared lame_dynlink.mli lame_loader.ml -o lame_loader.cmxs
+	[ ! -f lame.cmx.old ] || mv lame.cmx.old lame.cmx
+	[ ! -f lame.cmxa.old ] || mv lame.cmxa.old lame.cmxa
+
+clean-dyn-cmi: $(OCAML_DYNLINK)
+	rm -f lame_dynlink.cmi
 
 native-code-library: byte-code-library
 
@@ -53,5 +79,8 @@ install: libinstall
 uninstall: libuninstall
 
 update: uninstall install
+
+clean::
+	rm -f lame_dynlink*.cm* lame_loader.cm* lame_loader.o *.cmxs
 
 -include $(OCAMLMAKEFILE)

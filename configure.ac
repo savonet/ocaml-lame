@@ -16,6 +16,14 @@ fi
 
 AC_CHECK_OCAML_COMPILERS()
 
+AC_MSG_CHECKING([whether to build shared modules])
+if test -n "${OCAML_HAS_FIRST_CLASS_MODULES}"; then
+  AC_MSG_RESULT([yes])
+else
+  OCAML_DYNLINK=""
+  AC_MSG_RESULT([first-class modules not supported by the compiler, disabling shared modules])
+fi
+
 AC_PROG_CC
 AC_CHECK_TOOL([AR],[ar],no)
 AC_SUBST(AR)
