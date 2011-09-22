@@ -85,7 +85,7 @@ CAMLprim value ocaml_lame_init(value unit)
 #define BIND_SET_INT_PARAM(p) \
 CAMLprim value ocaml_lame_set_##p(value l, value v) \
 { \
-    CAMLparam2(l, v); \
+    CAMLparam1(l); \
     lame_set_##p(Lame_val(l), Int_val(v)); \
     CAMLreturn(Val_unit); \
 }
@@ -155,6 +155,27 @@ BIND_INT_PARAM(VBR_mean_bitrate_kbps);
 BIND_INT_PARAM(VBR_min_bitrate_kbps);
 BIND_INT_PARAM(VBR_max_bitrate_kbps);
 BIND_INT_PARAM(VBR_hard_min);
+
+#define BIND_SET_BOOL_PARAM(p) \
+CAMLprim value ocaml_lame_set_##p(value l, value v) \
+{ \
+    CAMLparam1(l); \
+    lame_set_##p(Lame_val(l), Int_val(v)); \
+    CAMLreturn(Val_unit); \
+}
+
+#define BIND_GET_BOOL_PARAM(p) \
+CAMLprim value ocaml_lame_get_##p(value l) \
+{ \
+    CAMLparam1(l); \
+    CAMLreturn(Val_bool(lame_get_##p(Lame_val(l)))); \
+}
+
+#define BIND_BOOL_PARAM(p) BIND_GET_BOOL_PARAM(p) BIND_SET_BOOL_PARAM(p)
+ 
+BIND_BOOL_PARAM(copyright)
+BIND_BOOL_PARAM(original)
+BIND_BOOL_PARAM(extension)
 
 /****** Encoding ******/
 

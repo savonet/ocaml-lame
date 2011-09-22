@@ -123,6 +123,18 @@ val set_brate : encoder -> int -> unit
 (** Set the compression ratio (default: 11). *)
 val set_compression_ratio : encoder -> float -> unit
 
+(** Get/set private bit. *)
+val set_private : encoder -> bool -> unit
+val get_private : encoder -> bool
+
+(** Get/set copyright bit. *)
+val set_copyright : encoder -> bool -> unit
+val get_copyright : encoder -> bool
+
+(** Get/set original bit. *)
+val set_original : encoder -> bool -> unit
+val get_original : encoder -> bool
+
 (** A call to [init_params] failed for some reason. *)
 exception Init_params_failed
 

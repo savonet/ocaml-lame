@@ -41,11 +41,11 @@ external set_num_channels : encoder -> int -> unit = "ocaml_lame_set_num_channel
 
 external set_out_samplerate : encoder -> int -> unit = "ocaml_lame_set_out_samplerate"
 
-external _set_quality : encoder -> int -> unit = "ocaml_lame_set_quality"
+external set_quality : encoder -> int -> unit = "ocaml_lame_set_quality"
 
 let set_quality e q =
   if q < 0 || q > 9 then invalid_arg "quality";
-  _set_quality e q
+  set_quality e q
 
 type mode = Stereo | Joint_stereo | Dual_channel | Mono
 
@@ -68,6 +68,18 @@ external set_vbr_hard_min : encoder -> bool -> unit = "ocaml_lame_set_VBR_hard_m
 external set_brate : encoder -> int -> unit = "ocaml_lame_set_brate"
 
 external set_compression_ratio : encoder -> float -> unit = "ocaml_lame_set_compression_ratio"
+
+external set_private : encoder -> bool -> unit = "ocaml_lame_set_extension"
+
+external get_private : encoder -> bool = "ocaml_lame_get_extension"
+
+external set_original : encoder -> bool -> unit = "ocaml_lame_set_original"
+
+external get_original : encoder -> bool = "ocaml_lame_get_original"
+
+external set_copyright : encoder -> bool -> unit = "ocaml_lame_set_copyright"
+
+external get_copyright : encoder -> bool = "ocaml_lame_get_copyright"
 
 external init_params : encoder -> unit = "ocaml_lame_init_params"
 
