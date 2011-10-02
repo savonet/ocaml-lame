@@ -1,5 +1,6 @@
 PROGNAME = ocaml-lame
-DISTFILES = CHANGES COPYING Makefile.in README configure.ac configure bootstrap m4/*.m4 \
+DISTFILES = @AUTOCONF_INSTALL_FILES@ \
+			CHANGES COPYING Makefile.in README configure.ac configure bootstrap \
 	    src/META.in src/Makefile.in src/OCamlMakefile src/lame.ml src/lame.mli src/lame_stubs.c \
 	    src/lame_loader.ml src/lame_dynlink.mli.in \
 	    examples/Makefile.in examples/OCamlMakefile examples/configure.ac examples/configure examples/wav2mp3.ml

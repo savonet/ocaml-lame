@@ -1,7 +1,7 @@
 # $Id$
 
 # check for one particular file of the sources
-AC_INIT([ocaml-lame],[0.3.0],[savonet-users@lists.sourceforge.net])
+AC_INIT([ocaml-lame],[0.4.0],[savonet-users@lists.sourceforge.net])
 
 VERSION=$PACKAGE_VERSION
 AC_MSG_RESULT(configuring $PACKAGE_STRING)
