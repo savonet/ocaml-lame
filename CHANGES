@@ -1,6 +1,6 @@
-0.4.0 ()
+0.3.1 (04-10-2011)
 =====
-* Support for special bits in MP3 frames
+* Support for setting special bits in MP3 frames: original, copyright and private.
 
 0.3.0 (14-06-2011)
 =====
