@@ -101,7 +101,7 @@ let encode_buffer_float enc left right smpl =
 
 external encode_flush : encoder -> string = "ocaml_lame_encode_flush"
 
-external encode_flush_nogap : encoder -> string = "ocaml_lame_encode_flush"
+external encode_flush_nogap : encoder -> string = "ocaml_lame_encode_flush_nogap"
 
 module Id3tag =
 struct
