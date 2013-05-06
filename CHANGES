@@ -1,3 +1,7 @@
+0.3.2 (06-05-2013)
+=====
+* Correct binding for flush_nogap.
+
 0.3.1 (04-10-2011)
 =====
 * Support for setting special bits in MP3 frames: original, copyright and private.
