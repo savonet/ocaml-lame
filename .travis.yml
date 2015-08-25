@@ -1,0 +1,9 @@
+language: c
+addons:
+  apt:
+    packages:
+    - ocaml-nox
+    - ocaml-findlib
+    - libmp3lame-dev
+
+script: ./bootstrap && ./configure && make
