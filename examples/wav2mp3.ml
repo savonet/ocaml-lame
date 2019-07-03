@@ -24,8 +24,6 @@
   @author Samuel Mimram
   *)
 
-(* $Id$ *)
-
 open Unix
 
 
@@ -46,7 +44,7 @@ let input_string chan len =
   let ans = String.create len in
     (* TODO: check length *)
     ignore (input chan ans 0 len) ;
-    ans
+    (Bytes.unsafe_to_string ans)
 
 let input_int chan =
   let buf = input_string chan 4 in
@@ -90,8 +88,6 @@ let _ =
     );
   let ic = open_in_bin !src in
   let oc = open_out_bin !dst in
-  let r = ref 1 in
-    (* TODO: improve! *)
     if input_string ic 4 <> "RIFF" then invalid_arg "No RIFF tag";
     ignore (input_string ic 4);
     if input_string ic 4 <> "WAVE" then invalid_arg "No WAVE tag";
@@ -103,6 +99,17 @@ let _ =
     let _ = input_int ic in (* bytes / s *)
     let _ = input_short ic in (* block align *)
     let bits = input_short ic in
+    (* Skip to data part *)
+    let rec skip () =
+      match input_string ic 4 with
+      | "data" -> ()
+      | "LIST" ->
+         let n = input_int ic in
+         ignore (input_string ic n);
+         skip ()
+      | _ -> assert false
+    in
+    skip ();
     (* let enc_params =
       {
         Vorbis.enc_bitrate = Some !bitrate ;
@@ -126,17 +133,17 @@ let _ =
       Printf.printf
         "Encoding to: MP3 %d channels, %d Hz, %d kbps\nPlease wait...\n%!"
         (if !stereo then 2 else 1) !freq !bitrate ;
-      if input_string ic 4 <> "data" then invalid_arg "No data tag";
       (* output oc header 0 (String.length header); *)
       let buflen = !buflen in
       let buf = String.create buflen in
         begin try while true do
           really_input ic buf 0 buflen;
+          let buf = Bytes.unsafe_to_string buf in
           let outbuf = Lame.encode_buffer enc buf (buflen / 4) in
-            output oc outbuf 0 (String.length outbuf);
+            output oc (Bytes.of_string outbuf) 0 (String.length outbuf);
         done;
         with End_of_file -> () end;
         let outbuf = Lame.encode_flush enc in
-          output oc outbuf 0 (String.length outbuf);
+          output oc (Bytes.of_string outbuf) 0 (String.length outbuf);
           Printf.printf "Finished in %.0f seconds.\n" ((Unix.time ())-.start);
           Gc.full_major ()
