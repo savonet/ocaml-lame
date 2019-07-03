@@ -6,5 +6,6 @@ addons:
     - ocaml-nox
     - ocaml-findlib
     - libmp3lame-dev
+    - ffmpeg
 
-script: ./bootstrap && ./configure && make
+script: ./bootstrap && ./configure && make && make test
