@@ -1,10 +1,11 @@
 opam-version: "2.0"
-version: "dev"
+name: "lame"
+version: "0.3.3"
 maintainer: "Romain Beauxis <toots@rastageeks.org>"
 authors: "The Savonet Team <savonet-users@lists.sourceforge.net>"
 homepage: "https://github.com/savonet/ocaml-lame"
 build: [
-  ["./bootstrap"]
+  ["./bootstrap"] {pinned}
   ["./configure" "--prefix" prefix] {os != "macos"}
   [
     "./configure"
@@ -14,13 +15,16 @@ build: [
     "--prefix"
     prefix
   ] {os = "macos"}
+  [make "clean"] {pinned}
   [make]
 ]
 install: [
   [make "install"]
 ]
-remove: ["ocamlfind" "remove" "lame"]
-depends: ["ocaml" "ocamlfind"]
+depends: [
+  "ocaml"
+  "ocamlfind" {build}
+]
 depexts: [
   ["lame-dev"] {os-distribution = "alpine"}
   ["lame-devel"] {os-distribution = "centos"}
@@ -34,9 +38,3 @@ bug-reports: "https://github.com/savonet/ocaml-lame/issues"
 dev-repo: "git+https://github.com/savonet/ocaml-lame.git"
 synopsis:
   "Bindings for the lame library which provides functions for encoding mp3 files"
-flags: light-uninstall
-url {
-  src:
-    "https://github.com/savonet/ocaml-lame/releases/download/0.3.3/ocaml-lame-0.3.3.tar.gz"
-  checksum: "md5=a1585835f94f8d459157263ed2aaede3"
-}
