@@ -20,9 +20,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/* $Id$ */
-
 #include <caml/alloc.h>
+#include <caml/bigarray.h>
 #include <caml/callback.h>
 #include <caml/custom.h>
 #include <caml/fail.h>
@@ -30,6 +29,7 @@
 #include <caml/misc.h>
 #include <caml/mlvalues.h>
 #include <caml/signals.h>
+#include <caml/threads.h>
 
 #include <stdio.h>
 #include <stdint.h>
@@ -266,6 +266,40 @@ ocaml_lame_encode_buffer_float(value l, value _bufl, value _bufr,
 
   free(inbufl);
   free(inbufr);
+
+  if (ans < 0)
+  {
+    free(outbuf);
+    raise_enc_err(ans);
+  }
+  ret = caml_alloc_string(ans);
+  memcpy(String_val(ret), outbuf, ans);
+  free(outbuf);
+
+  CAMLreturn(ret);
+}
+
+CAMLprim value
+ocaml_lame_encode_buffer_float_ba(value l, value _bufl, value _bufr)
+{
+  CAMLparam3(l, _bufl, _bufr);
+  CAMLlocal1(ret);
+  lame_global_flags *lgf = Lame_val(l);
+  struct caml_ba_array *bal = Caml_ba_array_val(_bufl);
+  struct caml_ba_array *bar = Caml_ba_array_val(_bufr);
+  int samples = bal->dim[0];
+  if (bar->dim[0] != samples)
+    caml_failwith("Invalid argument: buffers must be of same length");
+
+  caml_release_runtime_system();
+
+  int outbuf_len = 1.25 * samples + 7200;
+  unsigned char *outbuf = malloc(outbuf_len);
+  int ans;
+
+  ans = lame_encode_buffer_float(lgf, bal->data, bar->data, samples, outbuf, outbuf_len);
+
+  caml_acquire_runtime_system();
 
   if (ans < 0)
   {

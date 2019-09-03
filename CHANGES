@@ -1,3 +1,7 @@
+0.3.4 (unreleased)
+=====
+* Add encode_buffer_float_ba.
+
 0.3.3 (03-08-2015)
 =====
 * Dummy github release.

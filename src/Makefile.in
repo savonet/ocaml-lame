@@ -3,8 +3,6 @@
 #
 # by Samuel Mimram
 
-# $Id$
-
 OCAMLMAKEFILE = OCamlMakefile
 
 OCAMLFIND = @OCAMLFIND@

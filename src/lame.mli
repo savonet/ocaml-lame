@@ -176,6 +176,8 @@ val encode_buffer_float_part :
 val encode_buffer_float :
       encoder -> float array -> float array -> int -> string
 
+val encode_buffer_float_ba : encoder -> (float, Bigarray.float32_elt, Bigarray.c_layout) Bigarray.Array1.t -> (float, Bigarray.float32_elt, Bigarray.c_layout) Bigarray.Array1.t -> string
+
 (** Flush the PCM buffers, padding with zeros if needed to make a complete
   * frame. Will also write id3v1 tags (if any) into the bitstream. *)
 val encode_flush : encoder -> string

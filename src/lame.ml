@@ -18,8 +18,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *)
 
-(* $Id$ *)
-
 exception Init_params_failed
 exception Init_params_not_called
 exception Psychoacoustic_problem
@@ -90,6 +88,9 @@ external encode_buffer_part : encoder -> string -> int -> int -> string = "ocaml
 (** [encode_buffer_float_part enc left right offset samples]
   * encodes float samples, expected to be in [-1;1]. *)
 external encode_buffer_float_part : encoder -> float array -> float array -> int -> int -> string = "ocaml_lame_encode_buffer_float"
+
+(** Encode left and right buffers. Data are supposed to be scaled -/+32768. *)
+external encode_buffer_float_ba : encoder -> (float, Bigarray.float32_elt, Bigarray.c_layout) Bigarray.Array1.t -> (float, Bigarray.float32_elt, Bigarray.c_layout) Bigarray.Array1.t -> string = "ocaml_lame_encode_buffer_float_ba"
 
 (** [encode_buffer enc buf smpl] encodes [smpl] samples of PCM audio into MP3.
   * Input samples are expected to be 16bits little-endian, other input/output
