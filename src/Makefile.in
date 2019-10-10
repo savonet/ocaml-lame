@@ -53,7 +53,9 @@ lame_loader.cma: lame_dynlink.mli lame.cma lame_loader.ml
 opt-dyn : lame.cmxs lame_loader.cmxs
 
 lame_dynlink.mli: lame_dynlink.mli.in lame.cmi
-	$(OCAMLC) -i -intf lame_dynlink.mli.in > lame_dynlink.mli 2>/dev/null
+	chmod +w $@
+	$(OCAMLC) -i -intf $< > $@ 2>/dev/null
+	chmod a-w $@
 
 lame.cmxs: lame.ml lame_stubs.o
 	[ ! -f lame.cmx ] || mv lame.cmx lame.cmx.old
