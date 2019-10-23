@@ -174,6 +174,9 @@ val encode_buffer_float_part :
 val encode_buffer_float :
       encoder -> float array -> float array -> int -> string
 
+(** Encode a buffer of samples. The samples follow here lame's convention of
+    having floats in the range [-32768.,32768.] (yes, this is crazy but that's
+    the way things are). *)
 val encode_buffer_float_ba : encoder -> (float, Bigarray.float32_elt, Bigarray.c_layout) Bigarray.Array1.t -> (float, Bigarray.float32_elt, Bigarray.c_layout) Bigarray.Array1.t -> string
 
 (** Flush the PCM buffers, padding with zeros if needed to make a complete
@@ -231,7 +234,7 @@ val get_encoder_delay : encoder -> int
 val get_framesize : encoder -> int
 
 (** Number of PCM samples buffered, but not yet encoded to mp3 data. *)
-val  get_nb_samples_to_encode : encoder -> int
+val get_nb_samples_to_encode : encoder -> int
 
 (** Number of frames encoded so far. *)
 val get_nb_encoded_frames : encoder -> int
