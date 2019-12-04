@@ -222,6 +222,10 @@ AC_DEFUN([AC_PROG_FINDLIB],
   # checking for ocamlfind
   AC_CHECK_TOOL([OCAMLFIND],[ocamlfind],[no])
   AC_SUBST([OCAMLFIND])
+
+  if test "$OCAMLFIND" = "no"; then
+    AC_MSG_ERROR(Cannot find ocamlfind.)
+  fi
 ])
 
 AC_DEFUN([AC_CHECK_OCAML_STDLIB],
