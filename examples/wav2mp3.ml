@@ -51,6 +51,7 @@ let input_short chan =
 let stereo = ref true
 let freq = ref 44100
 let bitrate = ref 128
+let bigarray = ref false
 let usage = "usage: wav2mp3 [options] source destination"
 
 let _ =
@@ -60,6 +61,7 @@ let _ =
       "Sample frequency, default to 44100Hz" ;
       "--mono", Arg.Clear stereo,
       "Do not encode in stereo" ;
+      "--bigarray", Arg.Set bigarray, "Use bigarrays.";
       "--bitrate", Arg.Int (fun b -> bitrate := b),
       "Bitrate, in bits per second, defaults to 128kbps" ;
       "--buflen", Arg.Int (fun i -> buflen := i),
@@ -116,10 +118,26 @@ let _ =
   (* output oc header 0 (String.length header); *)
   let buflen = !buflen in
   let buf = Bytes.create buflen in
-  begin try while true do
+  let babufl = Bigarray.Array1.create Bigarray.Float32 Bigarray.c_layout (buflen / 4) in
+  let babufr = Bigarray.Array1.create Bigarray.Float32 Bigarray.c_layout (buflen / 4) in
+  begin
+    try while true do
         really_input ic buf 0 buflen;
         let buf = Bytes.unsafe_to_string buf in
-        let outbuf = Lame.encode_buffer enc buf (buflen / 4) in
+        let outbuf =
+          if not !bigarray then
+            Lame.encode_buffer enc buf (buflen / 4)
+          else
+            let f i =
+              let n = int_of_char buf.[2*i+1] * 0x100 + int_of_char buf.[2*i+0] in
+              if n <= 0x7fff then n else n - 0xffff
+            in
+            for i = 0 to buflen / 4 - 1 do
+              babufl.{i} <- float_of_int (f (2*i));
+              babufr.{i} <- float_of_int (f (2*i+1))
+            done;
+            Lame.encode_buffer_float_ba enc babufl babufr
+        in
         output oc (Bytes.of_string outbuf) 0 (String.length outbuf);
       done;
     with End_of_file -> () end;
