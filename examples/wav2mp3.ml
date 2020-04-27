@@ -26,36 +26,27 @@
 
 open Unix
 
-
 let src = ref ""
 let dst = ref ""
 
-            (*
-let title = ref None
-let artist = ref None
-let genre = ref None
-let date = ref None
-let album = ref None
-let tracknum = ref None
-             *)
 let buflen = ref 1024
 
 let input_string chan len =
-  let ans = String.create len in
-    (* TODO: check length *)
-    ignore (input chan ans 0 len) ;
-    (Bytes.unsafe_to_string ans)
+  let ans = Bytes.create len in
+  (* TODO: check length *)
+  ignore (input chan ans 0 len) ;
+  (Bytes.unsafe_to_string ans)
 
 let input_int chan =
   let buf = input_string chan 4 in
-    (int_of_char buf.[0])
-    + (int_of_char buf.[1]) lsl 8
-    + (int_of_char buf.[2]) lsl 16
-    + (int_of_char buf.[3]) lsl 24
+  (int_of_char buf.[0])
+  + (int_of_char buf.[1]) lsl 8
+  + (int_of_char buf.[2]) lsl 16
+  + (int_of_char buf.[3]) lsl 24
 
 let input_short chan =
   let buf = input_string chan 2 in
-    (int_of_char buf.[0]) + (int_of_char buf.[1]) lsl 8
+  (int_of_char buf.[0]) + (int_of_char buf.[1]) lsl 8
 
 let stereo = ref true
 let freq = ref 44100
@@ -64,7 +55,8 @@ let usage = "usage: wav2mp3 [options] source destination"
 
 let _ =
   Arg.parse
-    [ "--sample-freq", Arg.Int (fun f -> freq := f),
+    [
+      "--sample-freq", Arg.Int (fun f -> freq := f),
       "Sample frequency, default to 44100Hz" ;
       "--mono", Arg.Clear stereo,
       "Do not encode in stereo" ;
@@ -75,11 +67,11 @@ let _ =
     ]
     (
       let pnum = ref (-1) in
-        (fun s -> incr pnum; match !pnum with
-           | 0 -> src := s
-           | 1 -> dst := s
-           | _ -> Printf.eprintf "Error: too many arguments\n"; exit 1
-        )
+      (fun s -> incr pnum; match !pnum with
+         | 0 -> src := s
+         | 1 -> dst := s
+         | _ -> Printf.eprintf "Error: too many arguments\n"; exit 1
+      )
     ) usage;
   if !src = "" || !dst = "" then
     (
@@ -88,62 +80,50 @@ let _ =
     );
   let ic = open_in_bin !src in
   let oc = open_out_bin !dst in
-    if input_string ic 4 <> "RIFF" then invalid_arg "No RIFF tag";
-    ignore (input_string ic 4);
-    if input_string ic 4 <> "WAVE" then invalid_arg "No WAVE tag";
-    if input_string ic 4 <> "fmt " then invalid_arg "No fmt tag";
-    let _ = input_int ic in
-    let wav_type = input_short ic in (* TODO: should be 1 *)
-    let channels = input_short ic in
-    let infreq = input_int ic in
-    let _ = input_int ic in (* bytes / s *)
-    let _ = input_short ic in (* block align *)
-    let bits = input_short ic in
-    (* Skip to data part *)
-    let rec skip () =
-      match input_string ic 4 with
-      | "data" -> ()
-      | "LIST" ->
-         let n = input_int ic in
-         ignore (input_string ic n);
-         skip ()
-      | _ -> assert false
-    in
-    skip ();
-    (* let enc_params =
-      {
-        Vorbis.enc_bitrate = Some !bitrate ;
-        Vorbis.enc_min_bitrate = None;
-        Vorbis.enc_max_bitrate = None;
-        Vorbis.enc_quality = 0.5;
-        Vorbis.enc_channels = if !stereo then 2 else 1 ;
-        Vorbis.enc_sample_freq = Some !freq;
-        Vorbis.enc_managed = false;
-        Vorbis.enc_in_channels = channels;
-        Vorbis.enc_in_sample_freq = infreq;
-        Vorbis.enc_in_sample_size = bits;
-        Vorbis.enc_in_big_endian = false;
-      } in *)
-    let enc = Lame.create_encoder () in
-    let start = Unix.time () in
-      Lame.init_params enc;
-      Printf.printf
-        "Input detected: PCM WAVE %d channels, %d Hz, %d bits\n%!"
-        channels infreq bits;
-      Printf.printf
-        "Encoding to: MP3 %d channels, %d Hz, %d kbps\nPlease wait...\n%!"
-        (if !stereo then 2 else 1) !freq !bitrate ;
-      (* output oc header 0 (String.length header); *)
-      let buflen = !buflen in
-      let buf = String.create buflen in
-        begin try while true do
-          really_input ic buf 0 buflen;
-          let buf = Bytes.unsafe_to_string buf in
-          let outbuf = Lame.encode_buffer enc buf (buflen / 4) in
-            output oc (Bytes.of_string outbuf) 0 (String.length outbuf);
-        done;
-        with End_of_file -> () end;
-        let outbuf = Lame.encode_flush enc in
-          output oc (Bytes.of_string outbuf) 0 (String.length outbuf);
-          Printf.printf "Finished in %.0f seconds.\n" ((Unix.time ())-.start);
-          Gc.full_major ()
+  if input_string ic 4 <> "RIFF" then invalid_arg "No RIFF tag";
+  ignore (input_string ic 4);
+  if input_string ic 4 <> "WAVE" then invalid_arg "No WAVE tag";
+  if input_string ic 4 <> "fmt " then invalid_arg "No fmt tag";
+  let _ = input_int ic in
+  let wav_type = input_short ic in
+  assert (wav_type = 1);
+  let channels = input_short ic in
+  let infreq = input_int ic in
+  let _ = input_int ic in (* bytes / s *)
+  let _ = input_short ic in (* block align *)
+  let bits = input_short ic in
+  (* Skip to data part *)
+  let rec skip () =
+    match input_string ic 4 with
+    | "data" -> ()
+    | "LIST" ->
+      let n = input_int ic in
+      ignore (input_string ic n);
+      skip ()
+    | _ -> assert false
+  in
+  skip ();
+  let enc = Lame.create_encoder () in
+  Lame.set_brate enc !bitrate;
+  let start = Unix.time () in
+  Lame.init_params enc;
+  Printf.printf
+    "Input detected: PCM WAVE %d channels, %d Hz, %d bits\n%!"
+    channels infreq bits;
+  Printf.printf
+    "Encoding to: MP3 %d channels, %d Hz, %d kbps\nPlease wait...\n%!"
+    (if !stereo then 2 else 1) !freq !bitrate ;
+  (* output oc header 0 (String.length header); *)
+  let buflen = !buflen in
+  let buf = Bytes.create buflen in
+  begin try while true do
+        really_input ic buf 0 buflen;
+        let buf = Bytes.unsafe_to_string buf in
+        let outbuf = Lame.encode_buffer enc buf (buflen / 4) in
+        output oc (Bytes.of_string outbuf) 0 (String.length outbuf);
+      done;
+    with End_of_file -> () end;
+  let outbuf = Lame.encode_flush enc in
+  output oc (Bytes.of_string outbuf) 0 (String.length outbuf);
+  Printf.printf "Finished in %.0f seconds.\n" ((Unix.time ())-.start);
+  Gc.full_major ()
