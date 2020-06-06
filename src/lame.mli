@@ -79,21 +79,23 @@ val set_quality : encoder -> int -> unit
 
 (** Compression mode. *)
 type mode =
-  | Stereo (** stereo, channels encoded independely *)
-  | Joint_stereo (** stereo, channels encoded together *)
-  | Dual_channel (** not supported *)
-  | Mono (** mono *)
+  | Stereo  (** stereo, channels encoded independely *)
+  | Joint_stereo  (** stereo, channels encoded together *)
+  | Dual_channel  (** not supported *)
+  | Mono  (** mono *)
 
 (** Set the compression mode. *)
 val set_mode : encoder -> mode -> unit
 
 (** VBR (Variable BitRate) mode. *)
 type vbr_mode =
-  | Vbr_off (** constant bitrate *)
+  | Vbr_off  (** constant bitrate *)
   | Vbr_rh
   | Vbr_abr
   | Vbr_mtrh
-  | Vbr_max_indicator (* don't use this (it's for sanity checks) *)
+  | Vbr_max_indicator
+
+(* don't use this (it's for sanity checks) *)
 
 (** Set the VBR mode. *)
 val set_vbr_mode : encoder -> vbr_mode -> unit
@@ -123,14 +125,17 @@ val set_compression_ratio : encoder -> float -> unit
 
 (** Get/set private bit. *)
 val set_private : encoder -> bool -> unit
+
 val get_private : encoder -> bool
 
 (** Get/set copyright bit. *)
 val set_copyright : encoder -> bool -> unit
+
 val get_copyright : encoder -> bool
 
 (** Get/set original bit. *)
 val set_original : encoder -> bool -> unit
+
 val get_original : encoder -> bool
 
 (** A call to [init_params] failed for some reason. *)
@@ -168,16 +173,19 @@ val encode_buffer : encoder -> string -> int -> string
   * samples of [left] and [right] channels starting at position [ofs].
   * Floats are expected to range over [-1;1]. *)
 val encode_buffer_float_part :
-      encoder -> float array -> float array -> int -> int -> string
+  encoder -> float array -> float array -> int -> int -> string
 
 (** Same as [encode_buffer_float_part] but with [ofs = 0]. *)
-val encode_buffer_float :
-      encoder -> float array -> float array -> int -> string
+val encode_buffer_float : encoder -> float array -> float array -> int -> string
 
 (** Encode a buffer of samples. The samples follow here lame's convention of
     having floats in the range [-32768.,32768.] (yes, this is crazy but that's
     the way things are). *)
-val encode_buffer_float_ba : encoder -> (float, Bigarray.float32_elt, Bigarray.c_layout) Bigarray.Array1.t -> (float, Bigarray.float32_elt, Bigarray.c_layout) Bigarray.Array1.t -> string
+val encode_buffer_float_ba :
+  encoder ->
+  (float, Bigarray.float32_elt, Bigarray.c_layout) Bigarray.Array1.t ->
+  (float, Bigarray.float32_elt, Bigarray.c_layout) Bigarray.Array1.t ->
+  string
 
 (** Flush the PCM buffers, padding with zeros if needed to make a complete
   * frame. Will also write id3v1 tags (if any) into the bitstream. *)
@@ -189,8 +197,7 @@ val encode_flush_nogap : encoder -> string
 
 (** {2 Id3 tags} *)
 
-module Id3tag :
-sig
+module Id3tag : sig
   (** This function should be called before any other in the [Id3tag] module. *)
   val init : encoder -> unit
 
@@ -220,9 +227,9 @@ end
 
 (** MPEG version. *)
 type mpeg_version =
-  | Mpeg_1 (** MPEG v1 *)
-  | Mpeg_2 (** MPEG v2 *)
-  | Mpeg_2_5 (** MPEG v2.5 *)
+  | Mpeg_1  (** MPEG v1 *)
+  | Mpeg_2  (** MPEG v2 *)
+  | Mpeg_2_5  (** MPEG v2.5 *)
 
 (** The MPEG version used by the encoder. *)
 val get_version : encoder -> mpeg_version

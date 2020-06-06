@@ -1,6 +1,8 @@
 0.3.4 (unreleased)
 =====
 * Add encode_buffer_float_ba.
+* Drop dynlink API
+* Switched to dune
 
 0.3.3 (03-08-2015)
 =====
