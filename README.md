@@ -1,7 +1,6 @@
 ocaml-lame
 
-This package contains an OCaml interface for 
-the fdk=aac library.
+This package contains an OCaml interface for the lame library.
 
 Please read the COPYING file before using this software.
 
