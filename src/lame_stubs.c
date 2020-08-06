@@ -197,7 +197,7 @@ CAMLprim value ocaml_lame_encode_buffer_interleaved(value l, value _buf,
 
   memcpy(inbuf, String_val(_buf), inbuf_len);
 
-  caml_enter_blocking_section();
+  caml_release_runtime_system();
 #if BYTE_ORDER == LITTLE_ENDIAN
 #elif BYTE_ORDER == BIG_ENDIAN
   int i;
@@ -207,7 +207,7 @@ CAMLprim value ocaml_lame_encode_buffer_interleaved(value l, value _buf,
 #error "Indians shall be either little or big, no other choice here."
 #endif
   ans = lame_encode_buffer_interleaved(lgf, inbuf, samples, outbuf, sizeof(outbuf));
-  caml_leave_blocking_section();
+  caml_acquire_runtime_system();
 
   free(inbuf);
 
@@ -240,10 +240,10 @@ CAMLprim value ocaml_lame_encode_buffer_float(value l, value _bufl, value _bufr,
     inbufr[i] = 32768. * Double_field(_bufr, ofs + i);
   }
 
-  caml_enter_blocking_section();
+  caml_release_runtime_system();
   ans = lame_encode_buffer_float(lgf, inbufl, inbufr, samples, outbuf,
                                  sizeof(outbuf));
-  caml_leave_blocking_section();
+  caml_acquire_runtime_system();
 
   free(inbufl);
   free(inbufr);
@@ -292,9 +292,9 @@ CAMLprim value ocaml_lame_encode_flush(value l) {
   int ans;
   unsigned char outbuf[LAME_MAXMP3BUFFER];
 
-  caml_enter_blocking_section();
+  caml_release_runtime_system();
   ans = lame_encode_flush(lgf, outbuf, sizeof(outbuf));
-  caml_leave_blocking_section();
+  caml_acquire_runtime_system();
 
   if (ans < 0) raise_enc_err(ans);
 
@@ -311,9 +311,9 @@ CAMLprim value ocaml_lame_encode_flush_nogap(value l) {
   int ans;
   unsigned char outbuf[LAME_MAXMP3BUFFER];
 
-  caml_enter_blocking_section();
+  caml_release_runtime_system();
   ans = lame_encode_flush_nogap(lgf, outbuf, sizeof(outbuf));
-  caml_leave_blocking_section();
+  caml_acquire_runtime_system();
 
   if (ans < 0) raise_enc_err(ans);
 
