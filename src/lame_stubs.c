@@ -191,9 +191,8 @@ CAMLprim value ocaml_lame_encode_buffer_interleaved(value l, value _buf,
   lame_global_flags *lgf = Lame_val(l);
   int samples = Int_val(_samples);
   int inbuf_len = caml_string_length(_buf);
-  int outbuf_len = 1.25 * samples + 7200;
   short int *inbuf = malloc(inbuf_len);
-  unsigned char *outbuf = malloc(outbuf_len);
+  unsigned char outbuf[LAME_MAXMP3BUFFER];
   int ans;
 
   memcpy(inbuf, String_val(_buf), inbuf_len);
@@ -207,18 +206,15 @@ CAMLprim value ocaml_lame_encode_buffer_interleaved(value l, value _buf,
 #else
 #error "Indians shall be either little or big, no other choice here."
 #endif
-  ans = lame_encode_buffer_interleaved(lgf, inbuf, samples, outbuf, outbuf_len);
+  ans = lame_encode_buffer_interleaved(lgf, inbuf, samples, outbuf, sizeof(outbuf));
   caml_leave_blocking_section();
 
   free(inbuf);
 
-  if (ans < 0) {
-    free(outbuf);
-    raise_enc_err(ans);
-  }
+  if (ans < 0) raise_enc_err(ans);
+
   ret = caml_alloc_string(ans);
   memcpy(Bytes_val(ret), outbuf, ans);
-  free(outbuf);
 
   CAMLreturn(ret);
 }
@@ -236,8 +232,7 @@ CAMLprim value ocaml_lame_encode_buffer_float(value l, value _bufl, value _bufr,
   int samples = Int_val(_samples);
   float *inbufl = malloc(sizeof(float) * samples);
   float *inbufr = malloc(sizeof(float) * samples);
-  int outbuf_len = 1.25 * samples + 7200;
-  unsigned char *outbuf = malloc(outbuf_len);
+  unsigned char outbuf[LAME_MAXMP3BUFFER];
   int i, ans;
 
   for (i = 0; i < samples; i++) {
@@ -247,19 +242,16 @@ CAMLprim value ocaml_lame_encode_buffer_float(value l, value _bufl, value _bufr,
 
   caml_enter_blocking_section();
   ans = lame_encode_buffer_float(lgf, inbufl, inbufr, samples, outbuf,
-                                 outbuf_len);
+                                 sizeof(outbuf));
   caml_leave_blocking_section();
 
   free(inbufl);
   free(inbufr);
 
-  if (ans < 0) {
-    free(outbuf);
-    raise_enc_err(ans);
-  }
+  if (ans < 0) raise_enc_err(ans);
+
   ret = caml_alloc_string(ans);
   memcpy(Bytes_val(ret), outbuf, ans);
-  free(outbuf);
 
   CAMLreturn(ret);
 }
@@ -277,22 +269,18 @@ CAMLprim value ocaml_lame_encode_buffer_float_ba(value l, value _bufl,
 
   caml_release_runtime_system();
 
-  int outbuf_len = 1.25 * samples + 7200;
-  unsigned char *outbuf = malloc(outbuf_len);
+  unsigned char outbuf[LAME_MAXMP3BUFFER];
   int ans;
 
   ans = lame_encode_buffer_float(lgf, bal->data, bar->data, samples, outbuf,
-                                 outbuf_len);
+                                 sizeof(outbuf));
 
   caml_acquire_runtime_system();
 
-  if (ans < 0) {
-    free(outbuf);
-    raise_enc_err(ans);
-  }
+  if (ans < 0) raise_enc_err(ans);
+
   ret = caml_alloc_string(ans);
   memcpy(Bytes_val(ret), outbuf, ans);
-  free(outbuf);
 
   CAMLreturn(ret);
 }
@@ -302,21 +290,16 @@ CAMLprim value ocaml_lame_encode_flush(value l) {
   CAMLlocal1(ret);
   lame_global_flags *lgf = Lame_val(l);
   int ans;
-  int outbuf_len =
-      lame_get_size_mp3buffer(lgf) + lame_get_encoder_padding(lgf) + 7200;
-  unsigned char *outbuf = malloc(outbuf_len);
+  unsigned char outbuf[LAME_MAXMP3BUFFER];
 
   caml_enter_blocking_section();
-  ans = lame_encode_flush(lgf, outbuf, outbuf_len);
+  ans = lame_encode_flush(lgf, outbuf, sizeof(outbuf));
   caml_leave_blocking_section();
 
-  if (ans < 0) {
-    free(outbuf);
-    raise_enc_err(ans);
-  }
+  if (ans < 0) raise_enc_err(ans);
+
   ret = caml_alloc_string(ans);
   memcpy(Bytes_val(ret), outbuf, ans);
-  free(outbuf);
 
   CAMLreturn(ret);
 }
@@ -326,20 +309,16 @@ CAMLprim value ocaml_lame_encode_flush_nogap(value l) {
   CAMLlocal1(ret);
   lame_global_flags *lgf = Lame_val(l);
   int ans;
-  int outbuf_len = lame_get_size_mp3buffer(lgf) + 7200;
-  unsigned char *outbuf = malloc(outbuf_len);
+  unsigned char outbuf[LAME_MAXMP3BUFFER];
 
   caml_enter_blocking_section();
-  ans = lame_encode_flush_nogap(lgf, outbuf, outbuf_len);
+  ans = lame_encode_flush_nogap(lgf, outbuf, sizeof(outbuf));
   caml_leave_blocking_section();
 
-  if (ans < 0) {
-    free(outbuf);
-    raise_enc_err(ans);
-  }
+  if (ans < 0) raise_enc_err(ans);
+
   ret = caml_alloc_string(ans);
   memcpy(Bytes_val(ret), outbuf, ans);
-  free(outbuf);
 
   CAMLreturn(ret);
 }

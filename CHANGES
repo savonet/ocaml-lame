@@ -3,6 +3,7 @@
 * Add encode_buffer_float_ba.
 * Drop dynlink API
 * Switched to dune
+* Use stack-allocated buffers.
 
 0.3.3 (03-08-2015)
 =====
