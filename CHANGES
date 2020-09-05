@@ -1,4 +1,4 @@
-0.3.4 (unreleased)
+0.3.4 (05-09-2020)
 =====
 * Add encode_buffer_float_ba.
 * Drop dynlink API
