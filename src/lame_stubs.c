@@ -37,12 +37,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#if !defined(LITTLE_ENDIAN) && defined(__LITTLE_ENDIAN)
-#define LITTLE_ENDIAN __LITTLE_ENDIAN
-#endif
-#if !defined(BIG_ENDIAN) && defined(__BIG_ENDIAN)
-#define BIG_ENDIAN __BIG_ENDIAN
-#endif
+#include "config.h"
 
 #ifndef Bytes_val
 #define Bytes_val String_val
@@ -198,13 +193,10 @@ CAMLprim value ocaml_lame_encode_buffer_interleaved(value l, value _buf,
   memcpy(inbuf, String_val(_buf), inbuf_len);
 
   caml_release_runtime_system();
-#if BYTE_ORDER == LITTLE_ENDIAN
-#elif BYTE_ORDER == BIG_ENDIAN
+#ifdef BIGENDIAN
   int i;
   for (i = 0; i < inbuf_len / 2; i++)
     inbuf[i] = bswap_16(inbuf[i]);
-#else
-#error "Indians shall be either little or big, no other choice here."
 #endif
   ans = lame_encode_buffer_interleaved(lgf, inbuf, samples, outbuf, sizeof(outbuf));
   caml_acquire_runtime_system();
