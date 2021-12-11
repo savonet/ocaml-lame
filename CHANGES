@@ -1,6 +1,7 @@
 0.3.5 (unreleased)
 =====
 * Better endianess detection.
+* Avoid race condition between the GC and `encode_buffer_float_ba`
 
 0.3.4 (05-09-2020)
 =====

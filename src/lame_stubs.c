@@ -255,6 +255,8 @@ CAMLprim value ocaml_lame_encode_buffer_float_ba(value l, value _bufl,
   lame_global_flags *lgf = Lame_val(l);
   struct caml_ba_array *bal = Caml_ba_array_val(_bufl);
   struct caml_ba_array *bar = Caml_ba_array_val(_bufr);
+  const float *bufl = bal->data;
+  const float *bufr = bar->data;
   int samples = bal->dim[0];
   if (bar->dim[0] != samples)
     caml_failwith("Invalid argument: buffers must be of same length");
@@ -264,7 +266,7 @@ CAMLprim value ocaml_lame_encode_buffer_float_ba(value l, value _bufl,
   unsigned char outbuf[LAME_MAXMP3BUFFER];
   int ans;
 
-  ans = lame_encode_buffer_float(lgf, bal->data, bar->data, samples, outbuf,
+  ans = lame_encode_buffer_float(lgf, bufl, bufr, samples, outbuf,
                                  sizeof(outbuf));
 
   caml_acquire_runtime_system();
