@@ -13,6 +13,7 @@
  (synopsis "MP3 encoding library")
  (description "Bindings for the lame library which provides functions for encoding mp3 files")
  (depends
+  conf-lame
   (dune (> 2.0))
   dune-configurator)
 )
