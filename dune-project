@@ -1,5 +1,5 @@
 (lang dune 2.0)
-(version 0.3.4)
+(version 0.3.5)
 (name lame)
 (source (github savonet/ocaml-lame))
 (license GPL-2.0)
