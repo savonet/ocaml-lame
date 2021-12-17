@@ -7,7 +7,7 @@
 (maintainers "The Savonet Team <savonet-users@lists.sourceforge.net>")
 
 (generate_opam_files true)
-(use_standard_c_and_cxx_flags true)
+(use_standard_c_and_cxx_flags false)
 
 (package
  (name lame)
