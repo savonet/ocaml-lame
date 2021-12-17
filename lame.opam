@@ -11,11 +11,12 @@ homepage: "https://github.com/savonet/ocaml-lame"
 bug-reports: "https://github.com/savonet/ocaml-lame/issues"
 depends: [
   "conf-lame"
-  "dune" {> "2.0"}
+  "dune" {>= "2.8"}
   "dune-configurator"
+  "odoc" {with-doc}
 ]
 build: [
-  ["dune" "subst"] {pinned}
+  ["dune" "subst"] {dev}
   [
     "dune"
     "build"
