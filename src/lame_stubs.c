@@ -37,6 +37,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "config.h"
+
 #ifndef Bytes_val
 #define Bytes_val String_val
 #endif

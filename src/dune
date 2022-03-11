@@ -4,6 +4,7 @@
  (synopsis "OCaml bindings for lame")
  (foreign_stubs
   (language c)
+  (extra_deps config.h)
   (names lame_stubs)
   (flags
    (:include c_flags.sexp)))
@@ -11,6 +12,6 @@
   (:include c_library_flags.sexp)))
 
 (rule
- (targets c_flags.sexp c_library_flags.sexp)
+ (targets c_flags.sexp c_library_flags.sexp config.h)
  (action
   (run ./config/discover.exe)))
