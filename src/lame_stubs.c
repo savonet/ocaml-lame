@@ -37,8 +37,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "config.h"
-
 #ifndef Bytes_val
 #define Bytes_val String_val
 #endif
@@ -212,6 +210,9 @@ CAMLprim value ocaml_lame_encode_buffer_interleaved(value l, value _buf,
 }
 
 static inline double clip(double s) {
+  // NaN
+  if (s != s) return 0;
+
   if (s < -1) {
     return -1;
   } else if (s > 1) {
