@@ -211,6 +211,15 @@ CAMLprim value ocaml_lame_encode_buffer_interleaved(value l, value _buf,
   CAMLreturn(ret);
 }
 
+static inline double clip(double s) {
+  if (s < -1) {
+    return -1;
+  } else if (s > 1) {
+    return 1;
+  } else
+    return s;
+}
+
 /* Input: float arrays, floats in [-1..1]
  * Output: MP3 frames.
  * Lame wants floats in +/- SHRTMAX, we renormalize when copying to C heap.
@@ -228,8 +237,8 @@ CAMLprim value ocaml_lame_encode_buffer_float(value l, value _bufl, value _bufr,
   int i, ans;
 
   for (i = 0; i < samples; i++) {
-    inbufl[i] = 32768. * Double_field(_bufl, ofs + i);
-    inbufr[i] = 32768. * Double_field(_bufr, ofs + i);
+    inbufl[i] = 32768. * clip(Double_field(_bufl, ofs + i));
+    inbufr[i] = 32768. * clip(Double_field(_bufr, ofs + i));
   }
 
   caml_release_runtime_system();
