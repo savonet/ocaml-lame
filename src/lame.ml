@@ -34,7 +34,6 @@ let _ =
 type encoder
 
 external create_encoder : unit -> encoder = "ocaml_lame_init"
-
 external frame_size : encoder -> int = "ocaml_lame_frame_size"
 
 external set_in_samplerate : encoder -> int -> unit
@@ -46,7 +45,8 @@ external set_num_channels : encoder -> int -> unit
 external set_out_samplerate : encoder -> int -> unit
   = "ocaml_lame_set_out_samplerate"
 
-external set_disable_reservoir : encoder -> bool -> unit = "ocaml_lame_set_disable_reservoir"
+external set_disable_reservoir : encoder -> bool -> unit
+  = "ocaml_lame_set_disable_reservoir"
 
 external set_quality : encoder -> int -> unit = "ocaml_lame_set_quality"
 
@@ -58,7 +58,8 @@ type mode = Stereo | Joint_stereo | Dual_channel | Mono
 
 external set_mode : encoder -> mode -> unit = "ocaml_lame_set_mode"
 
-external set_bWriteVbrTag : encoder -> bool -> unit = "ocaml_lame_set_bWriteVbrTag"
+external set_bWriteVbrTag : encoder -> bool -> unit
+  = "ocaml_lame_set_bWriteVbrTag"
 
 type vbr_mode = Vbr_off | Vbr_rh | Vbr_abr | Vbr_mtrh | Vbr_max_indicator
 

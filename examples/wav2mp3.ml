@@ -78,7 +78,7 @@ let _ =
     usage;
   if !src = "" || !dst = "" then (
     Printf.printf "%s\n" usage;
-    exit 1 );
+    exit 1);
   let ic = open_in_bin !src in
   let oc = open_out_bin !dst in
   if input_string ic 4 <> "RIFF" then invalid_arg "No RIFF tag";
@@ -144,7 +144,7 @@ let _ =
               babufl.{i} <- float_of_int (f (2 * i));
               babufr.{i} <- float_of_int (f ((2 * i) + 1))
             done;
-            Lame.encode_buffer_float_ba enc babufl babufr )
+            Lame.encode_buffer_float_ba enc babufl babufr)
         in
         output oc (Bytes.of_string outbuf) 0 (String.length outbuf)
       done

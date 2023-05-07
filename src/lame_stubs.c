@@ -205,12 +205,14 @@ CAMLprim value ocaml_lame_encode_buffer_interleaved(value l, value _buf,
   for (i = 0; i < inbuf_len / 2; i++)
     inbuf[i] = bswap_16(inbuf[i]);
 #endif
-  ans = lame_encode_buffer_interleaved(lgf, inbuf, samples, outbuf, sizeof(outbuf));
+  ans = lame_encode_buffer_interleaved(lgf, inbuf, samples, outbuf,
+                                       sizeof(outbuf));
   caml_acquire_runtime_system();
 
   free(inbuf);
 
-  if (ans < 0) raise_enc_err(ans);
+  if (ans < 0)
+    raise_enc_err(ans);
 
   ret = caml_alloc_string(ans);
   memcpy(Bytes_val(ret), outbuf, ans);
@@ -220,7 +222,8 @@ CAMLprim value ocaml_lame_encode_buffer_interleaved(value l, value _buf,
 
 static inline double clip(double s) {
   // NaN
-  if (s != s) return 0;
+  if (s != s)
+    return 0;
 
   if (s < -1) {
     return -1;
@@ -259,7 +262,8 @@ CAMLprim value ocaml_lame_encode_buffer_float(value l, value _bufl, value _bufr,
   free(inbufl);
   free(inbufr);
 
-  if (ans < 0) raise_enc_err(ans);
+  if (ans < 0)
+    raise_enc_err(ans);
 
   ret = caml_alloc_string(ans);
   memcpy(Bytes_val(ret), outbuf, ans);
@@ -290,7 +294,8 @@ CAMLprim value ocaml_lame_encode_buffer_float_ba(value l, value _bufl,
 
   caml_acquire_runtime_system();
 
-  if (ans < 0) raise_enc_err(ans);
+  if (ans < 0)
+    raise_enc_err(ans);
 
   ret = caml_alloc_string(ans);
   memcpy(Bytes_val(ret), outbuf, ans);
@@ -309,7 +314,8 @@ CAMLprim value ocaml_lame_encode_flush(value l) {
   ans = lame_encode_flush(lgf, outbuf, sizeof(outbuf));
   caml_acquire_runtime_system();
 
-  if (ans < 0) raise_enc_err(ans);
+  if (ans < 0)
+    raise_enc_err(ans);
 
   ret = caml_alloc_string(ans);
   memcpy(Bytes_val(ret), outbuf, ans);
@@ -328,7 +334,8 @@ CAMLprim value ocaml_lame_encode_flush_nogap(value l) {
   ans = lame_encode_flush_nogap(lgf, outbuf, sizeof(outbuf));
   caml_acquire_runtime_system();
 
-  if (ans < 0) raise_enc_err(ans);
+  if (ans < 0)
+    raise_enc_err(ans);
 
   ret = caml_alloc_string(ans);
   memcpy(Bytes_val(ret), outbuf, ans);
