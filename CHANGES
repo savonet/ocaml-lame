@@ -1,6 +1,6 @@
-0.3.7 (unreleased)
+0.3.7 (05-07-2023)
 ======
-* Add `frame_size`
+* Add `frame_size`, `set_disable_bitreservoir` and `set_bWriteVbrTag`
 
 0.3.6 (03-21-2022)
 =====
