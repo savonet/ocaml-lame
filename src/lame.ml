@@ -46,6 +46,8 @@ external set_num_channels : encoder -> int -> unit
 external set_out_samplerate : encoder -> int -> unit
   = "ocaml_lame_set_out_samplerate"
 
+external set_disable_reservoir : encoder -> bool -> unit = "ocaml_lame_set_disable_reservoir"
+
 external set_quality : encoder -> int -> unit = "ocaml_lame_set_quality"
 
 let set_quality e q =

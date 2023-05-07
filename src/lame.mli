@@ -81,6 +81,9 @@ val set_out_samplerate : encoder -> int -> unit
   *)
 val set_quality : encoder -> int -> unit
 
+(* Enable/disable the bit reservoir. *)
+val set_disable_reservoir : encoder -> bool -> unit
+
 (** Compression mode. *)
 type mode =
   | Stereo  (** stereo, channels encoded independely *)

@@ -163,6 +163,7 @@ BIND_INT_PARAM(VBR_hard_min);
 #define BIND_BOOL_PARAM(p) BIND_GET_BOOL_PARAM(p) BIND_SET_BOOL_PARAM(p)
 
 BIND_SET_BOOL_PARAM(bWriteVbrTag)
+BIND_SET_BOOL_PARAM(disable_reservoir)
 BIND_BOOL_PARAM(copyright)
 BIND_BOOL_PARAM(original)
 BIND_BOOL_PARAM(extension)
