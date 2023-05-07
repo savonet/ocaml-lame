@@ -99,7 +99,8 @@ type vbr_mode =
   | Vbr_mtrh
   | Vbr_max_indicator
 
-(* don't use this (it's for sanity checks) *)
+(** Write a Xing VBR header frame. (default: {true}) *)
+val set_bWriteVbrTag : encoder -> bool -> unit
 
 (** Set the VBR mode. *)
 val set_vbr_mode : encoder -> vbr_mode -> unit

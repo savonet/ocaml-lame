@@ -56,6 +56,8 @@ type mode = Stereo | Joint_stereo | Dual_channel | Mono
 
 external set_mode : encoder -> mode -> unit = "ocaml_lame_set_mode"
 
+external set_bWriteVbrTag : encoder -> bool -> unit = "ocaml_lame_set_bWriteVbrTag"
+
 type vbr_mode = Vbr_off | Vbr_rh | Vbr_abr | Vbr_mtrh | Vbr_max_indicator
 
 external set_vbr_mode : encoder -> vbr_mode -> unit = "ocaml_lame_set_vbr"
