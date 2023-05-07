@@ -1,3 +1,7 @@
+0.3.7 (unreleased)
+======
+* Add `frame_size`
+
 0.3.6 (03-21-2022)
 =====
 * Clip samples before encoding, filter out NaN values (#4)

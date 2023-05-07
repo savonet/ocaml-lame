@@ -73,6 +73,11 @@ CAMLprim value ocaml_lame_init(value unit) {
   CAMLreturn(l);
 }
 
+CAMLprim value ocaml_lame_frame_size(value _enc) {
+  CAMLparam1(_enc);
+  CAMLreturn(Val_int(lame_get_framesize(Lame_val(_enc))));
+}
+
 /***** Parameters *****/
 
 #define BIND_SET_INT_PARAM(p)                                                  \

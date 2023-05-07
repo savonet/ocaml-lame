@@ -35,6 +35,8 @@ type encoder
 
 external create_encoder : unit -> encoder = "ocaml_lame_init"
 
+external frame_size : encoder -> int = "ocaml_lame_frame_size"
+
 external set_in_samplerate : encoder -> int -> unit
   = "ocaml_lame_set_in_samplerate"
 

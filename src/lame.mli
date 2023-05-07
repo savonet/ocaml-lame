@@ -49,6 +49,10 @@ type encoder
 (** Create a new lame encoder. *)
 val create_encoder : unit -> encoder
 
+(** Frame size. All audio frames submitted to the encoder
+  * should have this number of samples per channel. *)
+val frame_size : encoder -> int
+
 (** {2 Parameters} *)
 
 (** Input sample rate in Hz (default: 44100). *)
