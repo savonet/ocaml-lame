@@ -18,11 +18,9 @@
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *)
 
-(**
-  An wav to mp3 converter using OCaml-Lame.
+(** An wav to mp3 converter using OCaml-Lame.
 
-  @author Samuel Mimram
-  *)
+    @author Samuel Mimram *)
 
 let src = ref ""
 let dst = ref ""
@@ -125,30 +123,29 @@ let _ =
   let babufr =
     Bigarray.Array1.create Bigarray.Float32 Bigarray.c_layout (buflen / 4)
   in
-  begin
-    try
-      while true do
-        really_input ic buf 0 buflen;
-        let buf = Bytes.unsafe_to_string buf in
-        let outbuf =
-          if not !bigarray then Lame.encode_buffer enc buf (buflen / 4)
-          else (
-            let f i =
-              let n =
-                (int_of_char buf.[(2 * i) + 1] * 0x100)
-                + int_of_char buf.[(2 * i) + 0]
-              in
-              if n <= 0x7fff then n else n - 0xffff
+  begin try
+    while true do
+      really_input ic buf 0 buflen;
+      let buf = Bytes.unsafe_to_string buf in
+      let outbuf =
+        if not !bigarray then Lame.encode_buffer enc buf (buflen / 4)
+        else (
+          let f i =
+            let n =
+              (int_of_char buf.[(2 * i) + 1] * 0x100)
+              + int_of_char buf.[(2 * i) + 0]
             in
-            for i = 0 to (buflen / 4) - 1 do
-              babufl.{i} <- float_of_int (f (2 * i));
-              babufr.{i} <- float_of_int (f ((2 * i) + 1))
-            done;
-            Lame.encode_buffer_float_ba enc babufl babufr)
-        in
-        output oc (Bytes.of_string outbuf) 0 (String.length outbuf)
-      done
-    with End_of_file -> ()
+            if n <= 0x7fff then n else n - 0xffff
+          in
+          for i = 0 to (buflen / 4) - 1 do
+            babufl.{i} <- float_of_int (f (2 * i));
+            babufr.{i} <- float_of_int (f ((2 * i) + 1))
+          done;
+          Lame.encode_buffer_float_ba enc babufl babufr)
+      in
+      output oc (Bytes.of_string outbuf) 0 (String.length outbuf)
+    done
+  with End_of_file -> ()
   end;
   let outbuf = Lame.encode_flush enc in
   output oc (Bytes.of_string outbuf) 0 (String.length outbuf);
