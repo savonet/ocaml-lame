@@ -8,7 +8,7 @@
 
 0.3.5 (12-16-2021)
 =====
-* Better endianess detection.
+* Better endianness detection.
 * Avoid race condition between the GC and `encode_buffer_float_ba`
 
 0.3.4 (05-09-2020)
@@ -53,7 +53,7 @@
 
 0.2.2 (2008-04-16)
 =====
-* More portable make invokation
+* More portable make invocation
 * Install .cmx file
 
 0.2.1 (2007-10-17)

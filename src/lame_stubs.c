@@ -46,7 +46,7 @@
 #define Lame_val(v) (*(lame_global_flags **)Data_custom_val(v))
 
 static inline int16_t bswap_16(int16_t x) {
-  return ((((x) >> 8) & 0xff) | (((x)&0xff) << 8));
+  return ((((x) >> 8) & 0xff) | (((x) & 0xff) << 8));
 }
 
 static void finalize_lame_t(value l) {
@@ -369,7 +369,7 @@ BIND_TAG_PARAM(track);
 /* TODO: check for errors. */
 BIND_TAG_PARAM(genre);
 
-/***** Informations *****/
+/***** Information *****/
 
 BIND_GET_INT_PARAM(version);
 BIND_GET_INT_PARAM(encoder_delay);

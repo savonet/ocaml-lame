@@ -1,3 +1,0 @@
-(executable
- (name wav2mp3)
- (libraries unix lame))

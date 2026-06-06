@@ -95,8 +95,8 @@ external init_bitstream : encoder -> unit = "ocaml_lame_init_bitstream"
 external encode_buffer_part : encoder -> string -> int -> int -> string
   = "ocaml_lame_encode_buffer_interleaved"
 
-(** [encode_buffer_float_part enc left right offset samples]
-  * encodes float samples, expected to be in [-1;1]. *)
+(** [encode_buffer_float_part enc left right offset samples] encodes float
+    samples, expected to be in [-1;1]. *)
 external encode_buffer_float_part :
   encoder -> float array -> float array -> int -> int -> string
   = "ocaml_lame_encode_buffer_float"
@@ -109,8 +109,8 @@ external encode_buffer_float_ba :
   string = "ocaml_lame_encode_buffer_float_ba"
 
 (** [encode_buffer enc buf smpl] encodes [smpl] samples of PCM audio into MP3.
-  * Input samples are expected to be 16bits little-endian, other input/output
-  * params are specified using [set_*] functions. *)
+    Input samples are expected to be 16bits little-endian, other input/output
+    params are specified using [set_*] functions. *)
 let encode_buffer enc buf smpl = encode_buffer_part enc buf 0 smpl
 
 let encode_buffer_float enc left right smpl =

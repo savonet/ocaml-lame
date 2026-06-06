@@ -1,4 +1,4 @@
-(lang dune 2.8)
+(lang dune 3.23)
 (version 0.3.7)
 (name lame)
 (source (github savonet/ocaml-lame))
@@ -7,14 +7,17 @@
 (maintainers "The Savonet Team <savonet-users@lists.sourceforge.net>")
 
 (generate_opam_files true)
+(subst disabled)
 (use_standard_c_and_cxx_flags false)
 
 (package
  (name lame)
  (synopsis "MP3 encoding library")
- (description "Bindings for the lame library which provides functions for encoding mp3 files")
+ (description
+  "Bindings for the lame library which provides functions for encoding mp3 files")
+ (allow_empty)
  (depends
   conf-lame
-  dune
+  conf-pkg-config
   dune-configurator)
 )
